@@ -1,0 +1,24 @@
+
+spring:
+  profiles:
+    include: database,outside
+  mvc:
+    static-path-pattern: /static/**
+  thymeleaf:
+    prefix=classpath: /templates/
+    chche: false
+#  data:
+#    elasticsearch:
+#      cluster-name: elasticsearch
+#      cluster-nodes: 106.52.135.197:9300
+
+mybatis:
+  mapperLocations:
+    - classpath:meta/*/*.xml
+    - classpath*:mapper/*/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+
+mapper:
+    mappers: tk.mybatis.mapper.common.Mapper
+    identity: MYSQL

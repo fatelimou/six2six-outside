@@ -1,0 +1,24 @@
+spring:
+  #自动重启，当项目内资源更新时.
+  devtools:
+    restart:
+      enabled: true
+  #DRDS
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    #todo
+    #修改成本地mysql连接.
+    url: jdbc:mysql://10.1.20.16:3306/wg_tongs?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: truedian#123
+    initialSize: 20
+    minIdle: 20
+    maxActive: 40
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM dual
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
