@@ -21,7 +21,7 @@ import java.util.Date;
 /**
  * 管理系统用户表.
  *
- * @author xiezhiyong on 2019/06/18
+ * @author limozhi on 2020/12/14s
  */
 @Table(name = "tb_admin_user")
 public class AdminUser implements Serializable {

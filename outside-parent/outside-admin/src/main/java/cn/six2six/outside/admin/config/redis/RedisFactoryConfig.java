@@ -29,14 +29,14 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 @Configuration
 public class RedisFactoryConfig {
 
-    @Value("${spring.redis.lettuce.pool.max-active}")
-    private int redisPoolMaxActive;
-    @Value("${spring.redis.lettuce.pool.max-idle}")
-    private int redisPoolMaxIdle;
-    @Value("${spring.redis.lettuce.pool.min-idle}")
-    private int redisPoolMinIdle;
-    @Value("${spring.redis.lettuce.pool.max-wait}")
-    private int redisPoolMaxWait;
+//    @Value("${spring.redis.lettuce.pool.max-active}")
+//    private int redisPoolMaxActive;
+//    @Value("${spring.redis.lettuce.pool.max-idle}")
+//    private int redisPoolMaxIdle;
+//    @Value("${spring.redis.lettuce.pool.min-idle}")
+//    private int redisPoolMinIdle;
+//    @Value("${spring.redis.lettuce.pool.max-wait}")
+//    private int redisPoolMaxWait;
 
     /**
      * 默认Redis实例.
