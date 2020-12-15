@@ -23,65 +23,53 @@ import java.util.Date;
  *
  * @author limozhi on 2020/12/14s
  */
-@Table(name = "tb_admin_user")
 public class AdminUser implements Serializable {
-    @Id
-    @Column(name = "n_id")
-    @GeneratedValue(generator = "JDBC")
+
     private Long id;
 
     /**
      * 用户名.
      */
-    @Column(name = "c_login_username")
     private String loginUsername;
 
     /**
      * 姓名.
      */
-    @Column(name = "c_nickname")
     private String nickname;
 
     /**
      * 密码.
      */
-    @Column(name = "c_password")
     private String password;
 
     /**
      * 绑定手机号.
      */
-    @Column(name = "c_bound_cellphone")
     private String boundCellphone;
 
     /**
      * 最后登录时间.
      */
-    @Column(name = "t_last_login_time")
     private Date lastLoginTime;
 
     /**
      * 状态, 0:正常 ,1:失效.
      */
-    @Column(name = "n_status")
     private Integer status;
 
     /**
      * 创建时间.
      */
-    @Column(name = "t_create_time")
     private Date createTime;
 
     /**
      * 更新时间.
      */
-    @Column(name = "t_update_time")
     private Date updateTime;
 
     /**
      * 是否修改过密码: 1=是, 0=否.
      */
-    @Column(name = "n_modify_pwd_or")
     private Integer modifyPwdOr;
 
 

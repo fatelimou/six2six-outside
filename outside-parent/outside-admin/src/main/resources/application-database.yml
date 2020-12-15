@@ -10,7 +10,7 @@ spring:
     #todo
     #修改成本地mysql连接.
     url: jdbc:mysql://106.13.109.112:3306/wg_tongs?useUnicode=true&characterEncoding=UTF-8
-    username: text
+    username: highest
     password: aa434451
     initialSize: 20
     minIdle: 20
