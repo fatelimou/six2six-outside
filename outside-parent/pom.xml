@@ -69,13 +69,12 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.boot</groupId>
-                <artifactId>nacos-config-spring-boot-starter</artifactId>
-                <version>${nacos-spring-boot.version}</version>
-            </dependency>
-
+            <!--nacos-->
+            <!--<dependency>-->
+            <!--<groupId>com.alibaba.boot</groupId>-->
+            <!--<artifactId>nacos-config-spring-boot-starter</artifactId>-->
+            <!--<version>${nacos-spring-boot.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>com.google.zxing</groupId>
                 <artifactId>core</artifactId>

@@ -3,11 +3,6 @@ INIT_PASSWORD: 028edf524076a99d043a2da38f0b0bc2
 #后台管理员id
 ADMIN_ID: 0
 
-spring.redis.host: 127.0.0.1
-spring.redis.port: 6379
-spring.redis.password: six2six
-spring.redis.database: 0
-
 spring:
   redis:
     host: host:127.0.0.1

@@ -28,12 +28,6 @@ public class RedisConfig {
 
     @Resource
     private LettuceConnectionFactory defaultLettuceConnectionFactory;
-//    @Resource
-//    private LettuceConnectionFactory lettuceConnectionFactory2;
-//    @Resource
-//    private LettuceConnectionFactory lettuceConnectionFactory3;
-//    @Resource
-//    private LettuceConnectionFactory lettuceConnectionFactory4;
 
 
     /**
