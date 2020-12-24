@@ -8,10 +8,8 @@
  */
 package cn.six2six.outside.dal.user.mapping;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
+import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,6 +17,7 @@ import java.util.Date;
  *
  * @author limozhi on 2020/12/14s
  */
+@Data
 public class WxUser{
 
     /**
@@ -40,6 +39,11 @@ public class WxUser{
      * openId.
      */
     private String openId;
+
+    /**
+     * 角色身份.
+     */
+    private Integer roleType;
 
     /**
      * 姓名.
@@ -162,45 +166,5 @@ public class WxUser{
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        WxUser wxUser = (WxUser) o;
-        return Objects.equal(id, wxUser.id) &&
-                Objects.equal(userId, wxUser.userId) &&
-                Objects.equal(unionId, wxUser.unionId) &&
-                Objects.equal(openId, wxUser.openId) &&
-                Objects.equal(nickname, wxUser.nickname) &&
-                Objects.equal(backImage, wxUser.backImage) &&
-                Objects.equal(gender, wxUser.gender) &&
-                Objects.equal(wxNum, wxUser.wxNum) &&
-                Objects.equal(wxPhone, wxUser.wxPhone) &&
-                Objects.equal(createTime, wxUser.createTime) &&
-                Objects.equal(updateTime, wxUser.updateTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, userId, unionId, openId, nickname, backImage, gender, wxNum, wxPhone, createTime, updateTime);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("id", id)
-                .add("userId", userId)
-                .add("unionId", unionId)
-                .add("openId", openId)
-                .add("nickname", nickname)
-                .add("backImage", backImage)
-                .add("gender", gender)
-                .add("wxNum", wxNum)
-                .add("wxPhone", wxPhone)
-                .add("createTime", createTime)
-                .add("updateTime", updateTime)
-                .toString();
     }
 }

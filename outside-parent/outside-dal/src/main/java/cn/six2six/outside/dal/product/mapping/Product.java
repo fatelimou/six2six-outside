@@ -46,6 +46,11 @@ public class Product {
     private String itemShortName;
 
     /**
+     * 单位.
+     */
+    private Integer unit;
+
+    /**
      * 商品状态(e.g 上架、下架、补货)
      */
     private Integer status;

@@ -7,6 +7,7 @@
         <result column="user_id" property="userId"/>
         <result column="union_id" property="unionId"/>
         <result column="open_id" property="openId"/>
+        <result column="role_type" property="roleType"/>
         <result column="nickname" property="nickname"/>
         <result column="back_image" property="backImage"/>
         <result column="gender" property="gender"/>
@@ -23,6 +24,7 @@
         user_id,
         union_id,
         open_id,
+        role_type,
         nickname,
         back_image,
         gender,
@@ -38,6 +40,7 @@
         user_id,
         union_id,
         open_id,
+        role_type,
         nickname,
         back_image,
         gender,
@@ -49,6 +52,7 @@
         #{userId},
         #{unionId},
         #{openId},
+        #{roleType},
         #{nickname},
         #{backImage},
         #{gender},
