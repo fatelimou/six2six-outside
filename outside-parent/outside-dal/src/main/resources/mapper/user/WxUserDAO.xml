@@ -63,4 +63,183 @@
         )
     </insert>
 
+    <!-- 根据对象插入不为空的字段数据 -->
+    <!-- 有tableId的支持分表，分表要在对象里面传入tableId -->
+    <insert id="insertNotNull" parameterType="cn.six2six.outside.dal.user.mapping.WxUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into
+        tb_wx_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId!=null and userId!=''">
+                user_id,
+            </if>
+            <if test="unionId!=null and unionId!=''">
+                union_id,
+            </if>
+            <if test="openId!=null and openId!=''">
+                open_id,
+            </if>
+            <if test="roleType!=null">
+                role_type,
+            </if>
+            <if test="nickname!=null and nickname!=''">
+                nickname,
+            </if>
+            <if test="backImage!=null and backImage!=''">
+                back_image,
+            </if>
+            <if test="gender!=null">
+                gender,
+            </if>
+            <if test="wxNum!=null and wxNum!=''">
+                wx_num,
+            </if>
+            <if test="wxPhone!=null and wxPhone!=''">
+                wx_phone,
+            </if>
+            <if test="createTime!=null">
+                t_create_time,
+            </if>
+            <if test="updateTime!=null">
+                t_update_time,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId!=null and userId!=''">
+                #{userId},
+            </if>
+            <if test="unionId!=null and unionId!=''">
+                #{unionId},
+            </if>
+            <if test="openId!=null and openId!=''">
+                #{openId},
+            </if>
+            <if test="roleType!=null">
+                #{roleType},
+            </if>
+            <if test="nickname!=null and nickname!=''">
+                #{nickname},
+            </if>
+            <if test="backImage!=null and backImage!=''">
+                #{backImage},
+            </if>
+            <if test="gender!=null">
+                #{gender},
+            </if>
+            <if test="wxNum!=null and wxNum!=''">
+                #{wxNum},
+            </if>
+            <if test="wxPhone!=null and wxPhone!=''">
+                #{wxPhone},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                #{updateTime},
+            </if>
+        </trim>
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+
+    <!-- 批量插入数据 -->
+    <!-- 有tableId的支持分表，分表要在传入的参数增加批量增加的tableId -->
+    <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO tb_wx_user
+        (
+        user_id,
+        union_id,
+        open_id,
+        role_type,
+        nickname,
+        back_image,
+        gender,
+        wx_num,
+        wx_phone,
+        create_time,
+        update_time
+        ) VALUES
+        <foreach collection="list" item="item" index="idx" separator="," >
+            (
+            #{item.userId},
+            #{item.unionId},
+            #{item.openId},
+            #{item.roleType},
+            #{item.nickname},
+            #{item.backImage},
+            #{item.gender},
+            #{item.wxNum},
+            #{item.wxPhone},
+            #{item.createTime},
+            #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 更新数据 -->
+    <!-- 有tableId的支持分表，分表要在对象里面传入tableId -->
+    <update id="update" parameterType="cn.six2six.outside.dal.user.mapping.WxUser">
+        UPDATE
+        tb_wx_user
+        <trim prefix="SET" suffixOverrides=",">
+            user_id = #{userId},
+            union_id = #{unionId},
+            open_id = #{openId},
+            role_type = #{roleType},
+            nickname = #{nickname},
+            back_image = #{backImage},
+            gender = #{gender},
+            wx_num = #{wxNum},
+            wx_phone = #{wxPhone},
+            create_time = #{createTime},
+            update_time = #{updateTime},
+        </trim>
+        WHERE
+        n_id = #{id}
+    </update>
+
+    <!-- 根据对象更新不为空的字段数据 -->
+    <!-- 有tableId的支持分表，分表要在对象里面传入tableId -->
+    <update id="updateNotNull" parameterType="cn.six2six.outside.dal.user.mapping.WxUser">
+        UPDATE
+        tb_wx_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId!=null and userId!=''">
+                user_id = #{userId},
+            </if>
+            <if test="unionId!=null and unionId!=''">
+                union_id = #{unionId},
+            </if>
+            <if test="openId!=null and openId!=''">
+                open_id = #{openId},
+            </if>
+            <if test="roleType!=null">
+                role_type = #{roleType},
+            </if>
+            <if test="nickname!=null and nickname!=''">
+                nickname = #{nickname},
+            </if>
+            <if test="backImage!=null and backImage!=''">
+                back_image = #{backImage},
+            </if>
+            <if test="gender!=null">
+                gender = #{gender},
+            </if>
+            <if test="wxNum!=null and wxNum!=''">
+                wx_num = #{wxNum},
+            </if>
+            <if test="wxPhone!=null and wxPhone!=''">
+                wx_phone = #{wxPhone},
+            </if>
+            <if test="createTime!=null">
+                t_create_time = #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                t_update_time = #{updateTime},
+            </if>
+        </trim>
+        WHERE n_id=#{id}
+    </update>
 </mapper>

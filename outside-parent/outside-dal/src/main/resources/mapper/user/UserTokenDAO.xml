@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.six2six.outside.dal.user.dao.UserTokenDAO">
+    <resultMap type="cn.six2six.outside.dal.user.mapping.UserToken" id="BaseResultMap">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="token" property="token"/>
+        <result column="client_type" property="clientType"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 表基础字段 -->
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        token,
+        client_type,
+        create_time,
+        update_time
+    </sql>
+
+    <insert id="insert" parameterType="cn.six2six.outside.dal.user.mapping.UserToken" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO tb_wx_user
+        (
+        user_id,
+        token,
+        client_type,
+        create_time,
+        update_time
+        )VALUES (
+        #{userId},
+        #{token},
+        #{clientType},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+</mapper>
