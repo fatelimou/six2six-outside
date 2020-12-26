@@ -36,6 +36,11 @@ public class Product {
     private String userId;
 
     /**
+     * 商品ID.
+     */
+    private String productId;
+
+    /**
      * 商品名称.
      */
     private String itemName;

@@ -6,6 +6,7 @@
         <result column="id" property="id"/>
         <result column="store_id" property="storeId"/>
         <result column="user_id" property="userId"/>
+        <result column="product_id" property="productId"/>
         <result column="item_name" property="itemName"/>
         <result column="item_short_name" property="itemShortName"/>
         <result column="unit" property="unit"/>
@@ -21,6 +22,7 @@
         id,
         store_id,
         user_id,
+        product_id,
         item_name,
         item_short_name,
         unit,
@@ -30,11 +32,82 @@
         update_time
     </sql>
 
+    <select id="selectAll" resultMap="BaseResultMap">
+      select   id,
+        store_id,
+        user_id,
+        product_id,
+        item_name,
+        item_short_name,
+        unit,
+        status,
+        is_valid,
+        create_time,
+        update_time
+      from tb_product
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select   id,
+        store_id,
+        user_id,
+        product_id,
+        item_name,
+        item_short_name,
+        unit,
+        status,
+        is_valid,
+        create_time,
+        update_time
+      from tb_product
+      where product_id = #{productId}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete
+        from tb_product
+        where id = #{productId}
+    </delete>
+
+    <update id="updateById">
+        update tb_product set
+        product_id = #{productId}
+        <if test="storeId != null">
+          , store_id = #{storeId}
+        </if>
+        <if test="userId != null">
+            ,user_id = #{userId}
+        </if>
+        <if test="itemName != null">
+            ,item_name = #{itemName}
+        </if>
+        <if test="itemShortName != null">
+            ,item_short_name = #{itemShortName}
+        </if>
+        <if test="unit != null">
+            ,unit = #{unit}
+        </if>
+        <if test="status != null">
+            ,status = #{status}
+        </if>
+        <if test="valid != null">
+            ,is_valid = #{valid}
+        </if>
+        <if test="createTime != null">
+            ,create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            ,update_time = #{updateTime}
+        </if>
+        where product_id = #{productId}
+    </update>
+
     <insert id="insert" parameterType="cn.six2six.outside.dal.user.mapping.WxUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO tb_product
         (
         store_id,
         user_id,
+        product_id,
         item_name,
         item_short_name,
         unit,
@@ -45,6 +118,7 @@
         )VALUES (
         #{storeId},
         #{userId},
+        #{productId},
         #{itemName},
         #{itemShortName},
         #{unit},
