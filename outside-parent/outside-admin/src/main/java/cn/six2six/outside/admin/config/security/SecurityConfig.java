@@ -28,6 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //super.configure(http);
         //配置不需要登陆验证
         http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
+        //关闭防跨域攻击功能
+        http.csrf().disable();
     }
 
 }
