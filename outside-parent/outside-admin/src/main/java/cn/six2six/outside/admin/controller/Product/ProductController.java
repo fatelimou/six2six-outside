@@ -25,12 +25,15 @@ public class ProductController {
     @RequestMapping(value = "/selectOne",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean selectOne(@Param(value = "productId") String productId){
+        // 根据id查询商品详情
         Product product = productService.selectOne(productId);
         ResultBean<Product> resultBean;
+        // 如果查询商品不为空，提示操作成功
         if(product != null){
             resultBean = ResultBean.success();
             resultBean.setData(product);
         }else {
+            // 否则提示操作失败
             resultBean = ResultBean.failed();
         }
         return resultBean;
@@ -39,8 +42,10 @@ public class ProductController {
     @RequestMapping(value = "/delete",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean delete(@Param(value = "productId") String productId){
+        // 根据商品id删除记录
         int result = productService.deleteById(productId);
         ResultBean<Product> resultBean;
+        // 删除记录数如果大于0条，提示操作成功
         if(result > 0){
             resultBean = ResultBean.success();
         }else {
@@ -53,8 +58,10 @@ public class ProductController {
     @RequestMapping(value = "/selectAll",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean selectAll(){
+        // 查询所有商品
         List<Product> products = productService.selectAll();
         ResultBean<List<Product>> resultBean;
+        // 查询所有记录不为空且记录一条以上
         if(products != null && products.size() > 0){
             resultBean = ResultBean.success();
             resultBean.setData(products);
@@ -73,6 +80,7 @@ public class ProductController {
         }
         int update = productService.update(product);
         ResultBean<Product> resultBean;
+        // 更新记录条数大于0条，提示操作成功
         if(update > 0){
             resultBean = ResultBean.success();
         }else {
@@ -86,8 +94,11 @@ public class ProductController {
     @RequestMapping(value = "/insert",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean insertProduct(Product product){
+        // 创建唯一性id
         product.setProductId(IDMakerUtils.makeID(IDEnum.PRODUCT_ID));
+        // 设置创建时间为当前时间
         product.setCreateTime(new Date());
+        // 第一次插入时间也为当前时间
         product.setUpdateTime(product.getCreateTime());
         int result = productService.insert(product);
         ResultBean<Product> resultBean;
