@@ -44,18 +44,11 @@ public class ProductController {
     public ResultBean delete(@Param(value = "productId") String productId){
         // 根据商品id删除记录
         int result = productService.deleteById(productId);
-        ResultBean<Product> resultBean;
-        // 删除记录数如果大于0条，提示操作成功
-        if(result > 0){
-            resultBean = ResultBean.success();
-        }else {
-            resultBean = ResultBean.failed();
-        }
-        return resultBean;
+        return getResultBean(result);
     }
 
 
-    @RequestMapping(value = "/selectAll",method = RequestMethod.GET)
+    @RequestMapping(value = "/selectAll", method = RequestMethod.GET)
     @ResponseBody
     public ResultBean selectAll(){
         // 查询所有商品
@@ -79,14 +72,8 @@ public class ProductController {
             product.setUpdateTime(new Date());
         }
         int update = productService.update(product);
-        ResultBean<Product> resultBean;
         // 更新记录条数大于0条，提示操作成功
-        if(update > 0){
-            resultBean = ResultBean.success();
-        }else {
-            resultBean = ResultBean.failed();
-        }
-        return resultBean;
+        return getResultBean(update);
     }
 
 
@@ -101,6 +88,10 @@ public class ProductController {
         // 第一次插入时间也为当前时间
         product.setUpdateTime(product.getCreateTime());
         int result = productService.insert(product);
+        return getResultBean(result);
+    }
+
+    private ResultBean getResultBean(int result){
         ResultBean<Product> resultBean;
         if(result > 0){
             resultBean = ResultBean.success();
