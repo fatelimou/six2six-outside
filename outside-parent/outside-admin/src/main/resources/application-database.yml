@@ -22,3 +22,7 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
