@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.six2six.outside.dal.order.dao.ShipmentOrderDao">
+<mapper namespace="cn.six2six.outside.dal.shipment.dao.ShipmentOrderDAO">
 
-    <select id="getById" resultType="cn.six2six.outside.dal.user.mapping.ShipmentOrder" parameterType="java.lang.String">
+    <select id="getById" resultType="cn.six2six.outside.dal.shipment.mapping.ShipmentOrder" parameterType="java.lang.String">
         SELECT *
         FROM tb_shipment_order
         WHERE shipment_order_id = #{shipmentOrderId}

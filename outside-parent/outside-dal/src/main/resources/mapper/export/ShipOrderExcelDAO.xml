@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.six2six.outside.dal.export.dao.ShipOrderExcelDao">
+<mapper namespace="cn.six2six.outside.dal.export.dao.ShipOrderExcelDAO">
     <select id="getAllExcel" resultType="cn.six2six.outside.dal.export.mapping.ShipOrderToExcel" parameterType="java.lang.String">
    SELECT
 	goods.item_name,

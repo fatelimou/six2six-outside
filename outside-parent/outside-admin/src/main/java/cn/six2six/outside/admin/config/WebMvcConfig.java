@@ -8,12 +8,17 @@
  */
 package cn.six2six.outside.admin.config;
 
+import cn.six2six.outside.admin.config.interceptor.UserLoginTokenCheckExtractorInterceptor;
+import cn.six2six.outside.admin.config.interceptor.UserSessionExtractorInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.Resource;
+
 /**
- * TODO:注解
+ *
  *
  * @author limozhi on 2020/12/04
  */
@@ -21,23 +26,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    /**
-     * @Resource依赖拦截器对象.
-     */
+    @Resource
+    private UserLoginTokenCheckExtractorInterceptor userLoginTokenCheckExtractorInterceptor;
+
+    @Resource
+    private UserSessionExtractorInterceptor userSessionExtractorInterceptor;
+
 
     /**
      * 增加拦截器.
      *
      * @param registry {@link InterceptorRegistry}.
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(logContextInterceptor);
-        registry.addInterceptor(debugSwitchInterceptor);
-        registry.addInterceptor(optLogInterceptor).addPathPatterns("/**");
-        registry.addInterceptor(pageHelperInterceptor).addPathPatterns("/**");
-        registry.addInterceptor(initPasswordInterceptor).addPathPatterns("/","/index");
+
+        //registry.addInterceptor(userLoginTokenCheckExtractorInterceptor).addPathPatterns("/**").order(UserLoginTokenCheckExtractorInterceptor.ORDER);
+        //registry.addInterceptor(userSessionExtractorInterceptor).addPathPatterns("/**").order(UserSessionExtractorInterceptor.ORDER);
+
     }
-    */
 
     /**
      * 资源地址重定向.

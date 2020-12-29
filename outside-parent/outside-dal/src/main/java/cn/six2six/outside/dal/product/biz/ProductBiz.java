@@ -1,16 +1,16 @@
-package cn.six2six.outside.admin.service;
+package cn.six2six.outside.dal.product.biz;
 
 import cn.six2six.outside.dal.product.dao.ProductDAO;
 import cn.six2six.outside.dal.product.mapping.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class ProductService {
+public class ProductBiz {
 
-    @Autowired
+    @Resource
     private ProductDAO productDAO;
 
     public Product selectOne(String productId){

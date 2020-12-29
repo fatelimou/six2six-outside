@@ -1,14 +1,17 @@
-package cn.six2six.outside.admin.controller.Product;
+package cn.six2six.outside.admin.controller.product;
 
-import cn.six2six.outside.admin.service.ProductService;
 import cn.six2six.outside.common.constant.IDEnum;
 import cn.six2six.outside.common.result.ResultBean;
 import cn.six2six.outside.common.utils.IDMakerUtils;
+import cn.six2six.outside.dal.product.biz.ProductBiz;
 import cn.six2six.outside.dal.product.mapping.Product;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -19,14 +22,14 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    @Resource
+    private ProductBiz productBiz;
 
     @RequestMapping(value = "/selectOne",method = RequestMethod.GET)
     @ResponseBody
     public ResultBean selectOne(@Param(value = "productId") String productId){
         // 根据id查询商品详情
-        Product product = productService.selectOne(productId);
+        Product product = productBiz.selectOne(productId);
         ResultBean<Product> resultBean;
         // 如果查询商品不为空，提示操作成功
         if(product != null){
@@ -43,7 +46,7 @@ public class ProductController {
     @ResponseBody
     public ResultBean delete(@Param(value = "productId") String productId){
         // 根据商品id删除记录
-        int result = productService.deleteById(productId);
+        int result = productBiz.deleteById(productId);
         return getResultBean(result);
     }
 
@@ -52,7 +55,7 @@ public class ProductController {
     @ResponseBody
     public ResultBean selectAll(){
         // 查询所有商品
-        List<Product> products = productService.selectAll();
+        List<Product> products = productBiz.selectAll();
         ResultBean<List<Product>> resultBean;
         // 查询所有记录不为空且记录一条以上
         if(products != null && products.size() > 0){
@@ -71,7 +74,7 @@ public class ProductController {
         if(product.getUpdateTime() == null){
             product.setUpdateTime(new Date());
         }
-        int update = productService.update(product);
+        int update = productBiz.update(product);
         // 更新记录条数大于0条，提示操作成功
         return getResultBean(update);
     }
@@ -87,7 +90,7 @@ public class ProductController {
         product.setCreateTime(new Date());
         // 第一次插入时间也为当前时间
         product.setUpdateTime(product.getCreateTime());
-        int result = productService.insert(product);
+        int result = productBiz.insert(product);
         return getResultBean(result);
     }
 

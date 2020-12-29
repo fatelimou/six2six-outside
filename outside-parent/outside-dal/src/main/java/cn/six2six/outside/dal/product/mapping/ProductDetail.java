@@ -1,20 +1,21 @@
-package cn.six2six.outside.dal.user.mapping;
+package cn.six2six.outside.dal.product.mapping;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author : ZengRong
- * @date : 2020-12-25 17:48
- * @description : 出货详情表
+ * @date : 2020-12-25 17:33
+ * @description : 商品详情表
  **/
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ShipmentOrderDetail {
+public class ProductDetail {
 
     /**
      * 主键ID
@@ -22,39 +23,39 @@ public class ShipmentOrderDetail {
     private Long id;
 
     /**
-     * 出货商品id
+     * 商品ID
      */
     private String productId;
 
     /**
-     * 出货商品详情id
+     * 商品详情ID
      */
     private String productDetailId;
 
     /**
-     * 出货单id
+     * 单价
      */
-    private String shipmentOrderId;
+    private BigDecimal unitPrice;
 
     /**
-     * 出货单详情id
+     * 价格类型(0实价1面议)
      */
-    private String shipmentOrderDetailId;
+    private Integer priceType;
 
     /**
-     * 出货商品型号
+     * 型号
      */
     private String model;
 
     /**
-     *出货数量
+     *库存
      */
-    private String quantity;
+    private BigDecimal inventory;
 
     /**
-     *出货价格
+     * 备注
      */
-    private Double price;
+    private String remark;
 
     /**
      * 创建时间

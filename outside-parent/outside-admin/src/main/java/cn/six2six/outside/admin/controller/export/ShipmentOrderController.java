@@ -1,12 +1,12 @@
 package cn.six2six.outside.admin.controller.export;
 
-import cn.six2six.outside.admin.service.export.ShipmentOrderService;
 import cn.six2six.outside.common.result.ResultBean;
+import cn.six2six.outside.dal.export.biz.ShipmentOrderBiz;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -19,10 +19,10 @@ import java.io.IOException;
 @CrossOrigin
 @ApiModel("导出excel")
 @RequestMapping("outside/shipmentOrder")
-public class ShipmentOrderControl {
+public class ShipmentOrderController {
 
-    @Autowired
-    ShipmentOrderService shipmentOrderService;
+    @Resource
+    private ShipmentOrderBiz shipmentOrderBiz;
 
     /**
      * 生成excel
@@ -36,7 +36,7 @@ public class ShipmentOrderControl {
     public ResultBean getExcel(HttpServletResponse response,
                                @ApiParam(name = "出货单号", value = "shipmentOrderId", required = true) @PathVariable String shipmentOrderId) throws IOException {
 
-        return shipmentOrderService.getExcel(response, shipmentOrderId);
+        return shipmentOrderBiz.getExcel(response, shipmentOrderId);
 
     }
 

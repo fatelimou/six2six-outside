@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * 接口交互协议对象.
  *
- * @author yuanzx on unknown date.
+ * @author lmz on unknown date.
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ResultBean<T> implements Serializable {

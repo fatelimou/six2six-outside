@@ -22,7 +22,9 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
-
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
+  #Redis
+  redis:
+    host: host:127.0.0.1
+    port: 6379
+    password: six2six
+    database: 0

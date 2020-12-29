@@ -18,6 +18,7 @@ mybatis:
     - classpath*:mapper/*/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+    map-underscore-to-camel-case: true
 
 mapper:
     mappers: tk.mybatis.mapper.common.Mapper

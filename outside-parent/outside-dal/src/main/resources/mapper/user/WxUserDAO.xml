@@ -242,4 +242,16 @@
         </trim>
         WHERE n_id=#{id}
     </update>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select *
+        from tb_wx_user
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectByUnionId" resultMap="BaseResultMap">
+        select *
+        from tb_wx_user
+        where union_id = #{unionId}
+    </select>
 </mapper>

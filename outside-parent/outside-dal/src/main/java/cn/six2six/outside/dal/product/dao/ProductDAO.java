@@ -18,7 +18,6 @@ import java.util.List;
  *
  * @author limozhi on 2020/12/16
  */
-@Mapper
 public interface ProductDAO {
 
     /**

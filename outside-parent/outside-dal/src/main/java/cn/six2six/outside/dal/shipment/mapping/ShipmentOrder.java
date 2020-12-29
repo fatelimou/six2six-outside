@@ -1,4 +1,4 @@
-package cn.six2six.outside.dal.user.mapping;
+package cn.six2six.outside.dal.shipment.mapping;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

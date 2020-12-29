@@ -46,4 +46,20 @@ public interface WxUserDAO {
      * 非空更新一条微信授权用户记录.
      */
     int updateNotNull(WxUser wxUser);
+
+    /**
+     * 查询用户-用户ID.
+     *
+     * @param userId 用户ID.
+     * @return {@link WxUser}.
+     */
+    WxUser selectByUserId(@Param("userId") String userId);
+
+    /**
+     * 查询用户-根据unionId.
+     *
+     * @param unionId
+     * @return
+     */
+    WxUser selectByUnionId(@Param("unionId") String unionId);
 }

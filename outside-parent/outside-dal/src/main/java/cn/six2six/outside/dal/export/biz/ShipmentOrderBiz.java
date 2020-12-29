@@ -1,12 +1,11 @@
-package cn.six2six.outside.admin.service.export.impl;
+package cn.six2six.outside.dal.export.biz;
 
-import cn.six2six.outside.admin.service.export.ShipmentOrderService;
 import cn.six2six.outside.common.result.ResultBean;
 import cn.six2six.outside.common.utils.ConvertUpMoneyUtils;
-import cn.six2six.outside.dal.order.dao.ShipmentOrderDao;
-import cn.six2six.outside.dal.export.dao.ShipOrderExcelDao;
-import cn.six2six.outside.dal.user.mapping.ShipmentOrder;
+import cn.six2six.outside.dal.export.dao.ShipOrderExcelDAO;
 import cn.six2six.outside.dal.export.mapping.ShipOrderToExcel;
+import cn.six2six.outside.dal.shipment.dao.ShipmentOrderDAO;
+import cn.six2six.outside.dal.shipment.mapping.ShipmentOrder;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.sun.deploy.net.URLEncoder;
@@ -16,11 +15,12 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -32,14 +32,14 @@ import java.util.List;
  **/
 @Service
 @Slf4j
-public class ShipmentOrderServiceImpl implements ShipmentOrderService {
+public class ShipmentOrderBiz {
 
 
-    @Autowired
-    ShipmentOrderDao shipmentOrderDao;
+    @Resource
+    private ShipmentOrderDAO shipmentOrderDAO;
 
-    @Autowired
-    ShipOrderExcelDao shipOrderExcelDao;
+    @Resource
+    private ShipOrderExcelDAO shipOrderExcelDAO;
 
 
 
@@ -49,10 +49,9 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
      * @param shipmentOrderId 出货单号
      * @return
      */
-    @Override
     public ResultBean getExcel(HttpServletResponse response, String shipmentOrderId) throws IOException {
 
-        List<ShipOrderToExcel> allExcel = shipOrderExcelDao.getAllExcel(shipmentOrderId);
+        List<ShipOrderToExcel> allExcel = shipOrderExcelDAO.getAllExcel(shipmentOrderId);
 
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
@@ -260,9 +259,8 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
      * @param shipmentOrderId 出货单号
      * @return 出货数据
      */
-    @Override
     public ShipmentOrder getById(String shipmentOrderId) {
-        ShipmentOrder ShipmentOrder = shipmentOrderDao.getById(shipmentOrderId);
+        ShipmentOrder ShipmentOrder = shipmentOrderDAO.getById(shipmentOrderId);
         return ShipmentOrder;
     }
 

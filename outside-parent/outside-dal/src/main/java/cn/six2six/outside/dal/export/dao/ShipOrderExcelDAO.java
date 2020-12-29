@@ -12,8 +12,7 @@ import java.util.List;
  * @description : 结算单excel  信息获取  tb_product,tb_product_detail,tb_shipment_order,tb_shipment_order_ment
  **/
 @Mapper
-@Component
-public interface ShipOrderExcelDao {
+public interface ShipOrderExcelDAO {
 
     /**
      * 根据出货单号查询 数据库中excel表所需信息

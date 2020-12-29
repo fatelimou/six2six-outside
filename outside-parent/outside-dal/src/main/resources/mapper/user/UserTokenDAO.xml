@@ -38,4 +38,16 @@
         )
     </insert>
 
+    <select id="selectByToken" resultMap="BaseResultMap">
+        select *
+        from tb_user_token
+        where token = #{token}
+    </select>
+    
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select *
+        from tb_user_token
+        where user_id = #{userId}
+    </select>
+
 </mapper>

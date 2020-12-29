@@ -14,7 +14,9 @@ import cn.six2six.outside.common.constant.ResultConstantEnum;
 import cn.six2six.outside.common.result.ResultBean;
 import cn.six2six.outside.common.utils.HttpServletResponseUtils;
 import cn.six2six.outside.common.utils.TokenUtils;
+import cn.six2six.outside.dal.user.biz.WxUserBiz;
 import cn.six2six.outside.dal.user.dao.WxUserDAO;
+import cn.six2six.outside.dal.user.mapping.WxUser;
 import com.google.common.base.Strings;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Component;
@@ -59,7 +61,7 @@ public class UserSessionExtractorInterceptor implements HandlerInterceptor {
     private static String REQUEST_PATH_CONTAINS_FAVICON_ICO = "/favicon.ico/";
 
     @Resource
-    private WxUserDAO wxUserDAO;
+    private WxUserBiz wxUserBiz;
 
     /**
      * 预处理回调方法，实现处理器的预处理(判断用户是否登录)
@@ -93,8 +95,6 @@ public class UserSessionExtractorInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        UserSessionThreadLocalBean userSessionThreadLocalBean = getUserSession();
-
         /**
          * 获取token,获取不到直接返回
          */
@@ -115,7 +115,18 @@ public class UserSessionExtractorInterceptor implements HandlerInterceptor {
         /**
          * 获取用户ID与角色身份
          */
+        WxUser wxUser = wxUserBiz.findWxUser(token);
+        if(wxUser==null){
+            HttpServletResponseUtils.outPut(ResultBean.failed(ResultBean.failed(ResultConstantEnum.USER_TOKEN_IS_EXPIRE.getValue(),ResultConstantEnum.USER_TOKEN_IS_EXPIRE.getMessage())), response);
+            return false;
+        }
 
+        //设置本地线程对象属性.
+        UserSessionThreadLocalBean userSessionThreadLocalBean = getUserSession();
+        userSessionThreadLocalBean.setRoleType(wxUser.getRoleType());
+        userSessionThreadLocalBean.setToken(token);
+        userSessionThreadLocalBean.setUserId(wxUser.getUserId());
+        userSessionThreadLocalBean.setVersion(version);
 
         return true;
     }

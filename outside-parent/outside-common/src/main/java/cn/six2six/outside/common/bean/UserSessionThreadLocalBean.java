@@ -32,7 +32,7 @@ public class UserSessionThreadLocalBean implements Serializable {
     /**
      * 用户角色.
      */
-    private String roleType;
+    private Integer roleType;
 
     /**
      * 版本.

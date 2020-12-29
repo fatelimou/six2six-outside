@@ -24,5 +24,19 @@ public interface UserTokenDAO {
      */
     int insert(UserToken userToken);
 
+    /**
+     * 根据token查询用户token记录
+     *
+     * @param token 用户token
+     * @return {@link UserToken}.
+     */
     UserToken selectByToken(@Param("token") String token);
+
+    /**
+     * 根据用户ID查询用户token记录.
+     *
+     * @param userId 用户ID.
+     * @return {@link UserToken}.
+     */
+    UserToken selectByUserId(@Param("userId") String userId);
 }

@@ -3,9 +3,7 @@ INIT_PASSWORD: 028edf524076a99d043a2da38f0b0bc2
 #后台管理员id
 ADMIN_ID: 0
 
-spring:
-  redis:
-    host: host:127.0.0.1
-    port: 6379
-    password: six2six
-    database: 0
+miniapp:
+  common:
+    appid: wx446411d8d37fbd65
+    secret: 7252094034224fcd30eaa45af8716b8b
