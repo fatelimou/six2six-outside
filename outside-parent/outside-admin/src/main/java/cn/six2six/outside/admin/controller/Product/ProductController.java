@@ -1,10 +1,11 @@
-package cn.six2six.outside.admin.controller.product;
+package cn.six2six.outside.admin.controller.Product;
 
 import cn.six2six.outside.common.constant.IDEnum;
 import cn.six2six.outside.common.result.ResultBean;
 import cn.six2six.outside.common.utils.IDMakerUtils;
 import cn.six2six.outside.dal.product.biz.ProductBiz;
 import cn.six2six.outside.dal.product.mapping.Product;
+import cn.six2six.outside.dal.product.service.ProductService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +25,9 @@ public class ProductController {
 
     @Resource
     private ProductBiz productBiz;
+
+    @Resource
+    private ProductService productService;
 
     @RequestMapping(value = "/selectOne",method = RequestMethod.GET)
     @ResponseBody
@@ -46,7 +50,7 @@ public class ProductController {
     @ResponseBody
     public ResultBean delete(@Param(value = "productId") String productId){
         // 根据商品id删除记录
-        int result = productBiz.deleteById(productId);
+        int result = productService.deleteById(productId);
         return getResultBean(result);
     }
 
@@ -74,7 +78,7 @@ public class ProductController {
         if(product.getUpdateTime() == null){
             product.setUpdateTime(new Date());
         }
-        int update = productBiz.update(product);
+        int update = productService.update(product);
         // 更新记录条数大于0条，提示操作成功
         return getResultBean(update);
     }
@@ -90,7 +94,7 @@ public class ProductController {
         product.setCreateTime(new Date());
         // 第一次插入时间也为当前时间
         product.setUpdateTime(product.getCreateTime());
-        int result = productBiz.insert(product);
+        int result = productService.insert(product);
         return getResultBean(result);
     }
 

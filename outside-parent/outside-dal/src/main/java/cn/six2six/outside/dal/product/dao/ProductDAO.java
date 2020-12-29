@@ -9,6 +9,7 @@
 package cn.six2six.outside.dal.product.dao;
 
 import cn.six2six.outside.dal.product.mapping.Product;
+import cn.six2six.outside.dal.product.mapping.ProductDetail;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -49,4 +50,36 @@ public interface ProductDAO {
      * @param productId 商品ID
      */
     Product selectOne(String productId);
+
+    /**
+     * 插入一条商品详情主体.
+     *
+     * @param productDetail
+     */
+    int saveDetail(ProductDetail productDetail);
+
+    /**
+     * 根据商品ID查询 所有型号
+     * @param productId 商品Id
+     * @return
+     */
+    List<ProductDetail> queryAllDetail(String productId);
+
+    /**
+     * 根据Id查询一条记录
+     * @param productDetailId 商品详情ID
+     */
+    ProductDetail queryOneDetail(String productDetailId);
+
+    /**
+     * 删除一条商品详情记录
+     * @param productDetailId 商品详情ID
+     */
+    int removeByIdDetail(String productDetailId);
+
+    /**
+     * 更新商品详细
+     * @param productDetail 商品详细实体
+     */
+    int modifyDetail(ProductDetail productDetail);
 }

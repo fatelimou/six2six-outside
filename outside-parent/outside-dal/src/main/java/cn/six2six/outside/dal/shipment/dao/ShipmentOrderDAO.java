@@ -9,9 +9,9 @@ import cn.six2six.outside.dal.shipment.mapping.ShipmentOrder;
  **/
 public interface ShipmentOrderDAO {
     /**
-     * 根据id 查询出货单信息
+     * 根据id 查询一条出货单信息
      * @param shipmentOrderId 出货单号
      * @return 出货数据
      */
-    ShipmentOrder getById(String shipmentOrderId);
+    ShipmentOrder queryById(String shipmentOrderId);
 }

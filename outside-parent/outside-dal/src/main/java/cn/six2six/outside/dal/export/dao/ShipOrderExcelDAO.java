@@ -11,7 +11,6 @@ import java.util.List;
  * @date : 2020-12-27 13:12
  * @description : 结算单excel  信息获取  tb_product,tb_product_detail,tb_shipment_order,tb_shipment_order_ment
  **/
-@Mapper
 public interface ShipOrderExcelDAO {
 
     /**

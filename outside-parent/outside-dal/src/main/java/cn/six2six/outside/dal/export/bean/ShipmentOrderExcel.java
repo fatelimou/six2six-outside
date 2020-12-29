@@ -1,4 +1,4 @@
-package cn.six2six.outside.dal.export.mapping;
+package cn.six2six.outside.dal.export.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

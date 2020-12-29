@@ -1,10 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.six2six.outside.dal.shipment.dao.ShipmentOrderDAO">
+    <!-- tb_shipment_Order表基础字段 -->
+    <resultMap id="BaseResultMap" type="cn.six2six.outside.dal.shipment.mapping.ShipmentOrder" >
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="store_id" property="storeId"/>
+        <result column="shipment_order_id" property="shipmentOrderId"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
 
-    <select id="getById" resultType="cn.six2six.outside.dal.shipment.mapping.ShipmentOrder" parameterType="java.lang.String">
-        SELECT *
-        FROM tb_shipment_order
-        WHERE shipment_order_id = #{shipmentOrderId}
+
+    <select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.String">
+            SELECT
+                id,
+                user_id,
+                store_id,
+                shipment_order_id,
+                order_status,
+                total_price,
+                create_time,
+                update_time
+            FROM
+                tb_shipment_order
+            WHERE
+                shipment_order_id = #{shipmentOrderId};
     </select>
 </mapper>

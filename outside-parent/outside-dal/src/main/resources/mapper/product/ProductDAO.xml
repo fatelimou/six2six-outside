@@ -102,7 +102,7 @@
         where product_id = #{productId}
     </update>
 
-    <insert id="insert" parameterType="cn.six2six.outside.dal.user.mapping.WxUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insert" parameterType="cn.six2six.outside.dal.product.mapping.Product" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO tb_product
         (
         store_id,
@@ -129,4 +129,96 @@
         )
     </insert>
 
+    <select id="queryAllDetail" resultType="cn.six2six.outside.dal.product.mapping.ProductDetail" parameterType="java.lang.String">
+        SELECT
+            id,
+            product_id,
+            product_detail_id,
+            unit_price,
+            price_type,
+            model,
+            inventory,
+            remark,
+            create_time,
+            update_time
+        FROM
+            tb_product_detail
+        WHERE
+            product_id = #{productId};
+    </select>
+
+    <select id="queryOneDetail" resultType="cn.six2six.outside.dal.product.mapping.ProductDetail" parameterType="java.lang.String">
+        SELECT
+            id,
+            product_id,
+            product_detail_id,
+            unit_price,
+            price_type,
+            model,
+            inventory,
+            remark,
+            create_time,
+            update_time
+        FROM
+            tb_product_detail
+        WHERE
+            product_detail_id = #{productDetailId};
+    </select>
+
+    <delete id="removeByIdDetail" parameterType="java.lang.String">
+        delete
+        from tb_product_detail
+        where product_detail_id = #{productDetailId}
+    </delete>
+
+    <update id="modifyDetail">
+        update tb_product_detail set
+        <if test="unitPrice != null">
+            , unit_price = #{unitPrice}
+        </if>
+        <if test="priceType != null">
+            ,price_type = #{priceType}
+        </if>
+        <if test="model != null">
+            ,model = #{model}
+        </if>
+        <if test="inventory != null">
+            ,inventory = #{inventory}
+        </if>
+        <if test="remark != null">
+            ,remark = #{remark}
+        </if>
+        <if test="createTime != null">
+            ,create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            ,update_time = #{updateTime}
+        </if>
+        where product_detail_id = #{productDetailId}
+    </update>
+
+    <insert id="saveDetail" parameterType="cn.six2six.outside.dal.product.mapping.ProductDetail" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO tb_product_detail
+        (
+            product_id,
+            product_detail_id,
+            unit_price,
+            price_type,
+            model,
+            inventory,
+            remark,
+            create_time,
+            update_time
+        )VALUES (
+            #{productId},
+            #{productDetailId},
+            #{unitPrice},
+            #{priceType},
+            #{model},
+            #{inventory},
+            #{remark},
+            #{createTime},
+            #{updateTime}
+        )
+    </insert>
 </mapper>

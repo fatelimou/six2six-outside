@@ -17,7 +17,7 @@ import java.io.IOException;
  **/
 @RestController
 @CrossOrigin
-@ApiModel("导出excel")
+@ApiModel("出货单操作")
 @RequestMapping("outside/shipmentOrder")
 public class ShipmentOrderController {
 

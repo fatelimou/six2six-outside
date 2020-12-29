@@ -2,6 +2,7 @@ package cn.six2six.outside.dal.product.biz;
 
 import cn.six2six.outside.dal.product.dao.ProductDAO;
 import cn.six2six.outside.dal.product.mapping.Product;
+import cn.six2six.outside.dal.product.mapping.ProductDetail;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,20 +18,16 @@ public class ProductBiz {
         return productDAO.selectOne(productId);
     }
 
-    public int deleteById(String productId){
-        return productDAO.deleteById(productId);
-    }
-
     public List<Product> selectAll(){
         return productDAO.selectAll();
     }
 
-    public int update(Product product){
-        return productDAO.updateById(product);
+    public ProductDetail queryOneDetail(String productDetailId){
+        return productDAO.queryOneDetail(productDetailId);
     }
 
-    public int insert(Product product){
-        return productDAO.insert(product);
+    public List<ProductDetail> queryAllDetail(String productId){
+        return productDAO.queryAllDetail(productId);
     }
 
 }

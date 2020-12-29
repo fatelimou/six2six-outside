@@ -4,6 +4,7 @@ import cn.six2six.outside.common.result.ResultBean;
 import cn.six2six.outside.common.utils.ConvertUpMoneyUtils;
 import cn.six2six.outside.dal.export.dao.ShipOrderExcelDAO;
 import cn.six2six.outside.dal.export.mapping.ShipOrderToExcel;
+import cn.six2six.outside.dal.shipment.biz.ShipmentBiz;
 import cn.six2six.outside.dal.shipment.dao.ShipmentOrderDAO;
 import cn.six2six.outside.dal.shipment.mapping.ShipmentOrder;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * @author : ZengRong
  * @date : 2020-12-27 13:50
- * @description : 出货单 业务实现层
+ * @description : 导出excel 业务实现层
  **/
 @Service
 @Slf4j
@@ -36,7 +37,7 @@ public class ShipmentOrderBiz {
 
 
     @Resource
-    private ShipmentOrderDAO shipmentOrderDAO;
+    private ShipmentBiz shipmentBiz;
 
     @Resource
     private ShipOrderExcelDAO shipOrderExcelDAO;
@@ -58,7 +59,7 @@ public class ShipmentOrderBiz {
         // URLEncoder.encode防止中文乱码
         String fileName = URLEncoder.encode("结算单", "UTF-8");
         response.setHeader("Content-disposition",  "attachment;filename=" + fileName + ".xlsx");
-        ShipmentOrder shipmentOrder = getById(shipmentOrderId);
+        ShipmentOrder shipmentOrder = queryById(shipmentOrderId);
 
 
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -241,7 +242,7 @@ public class ShipmentOrderBiz {
      * @param value
      * @return
      */
-    public Cell getCell(XSSFRow row,int rowClum,Workbook workbook,String value){
+    private Cell getCell(XSSFRow row,int rowClum,Workbook workbook,String value){
         Cell cell = row.createCell(rowClum);
         CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.setFont(addAttrBold(workbook));
@@ -259,8 +260,8 @@ public class ShipmentOrderBiz {
      * @param shipmentOrderId 出货单号
      * @return 出货数据
      */
-    public ShipmentOrder getById(String shipmentOrderId) {
-        ShipmentOrder ShipmentOrder = shipmentOrderDAO.getById(shipmentOrderId);
+    public ShipmentOrder queryById(String shipmentOrderId) {
+        ShipmentOrder ShipmentOrder = shipmentBiz.queryById(shipmentOrderId);
         return ShipmentOrder;
     }
 
@@ -311,7 +312,7 @@ public class ShipmentOrderBiz {
      *
      * @return
      */
-    public CellStyle addAttrRow(Workbook workbook,String alignment){
+    private CellStyle addAttrRow(Workbook workbook,String alignment){
         Font font = addAttrBold(workbook);
         CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
