@@ -33,15 +33,15 @@ public class ProductService {
     }
 
     public int saveDetail(ProductDetail productDetail){
-        return productDAO.saveDetail(productDetail);
+        return productDAO.insertDetail(productDetail);
     }
 
     public int modifyDetail(ProductDetail productDetail){
-        return productDAO.modifyDetail(productDetail);
+        return productDAO.updateDetail(productDetail);
     }
 
     public int removeByIdDetail(String productDetailId){
-        return productDAO.removeByIdDetail(productDetailId);
+        return productDAO.deleteByIdDetail(productDetailId);
     }
 
 

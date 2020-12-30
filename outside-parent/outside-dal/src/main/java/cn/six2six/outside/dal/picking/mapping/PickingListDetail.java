@@ -22,11 +22,6 @@ public class PickingListDetail {
     private Long id;
 
     /**
-     * 进货单id
-     */
-    private String purchaseId;
-
-    /**
      * 进货商品id
      */
     private String productId;
@@ -35,6 +30,11 @@ public class PickingListDetail {
      * 进货商品详情ID
      */
     private String productDetailId;
+
+    /**
+     * 进货单id
+     */
+    private String pickingListId;
 
     /**
      * 进货商品型号
@@ -49,7 +49,7 @@ public class PickingListDetail {
     /**
      * 进货数量
      */
-    private String count;
+    private String amount;
 
     /**
      * 创建时间

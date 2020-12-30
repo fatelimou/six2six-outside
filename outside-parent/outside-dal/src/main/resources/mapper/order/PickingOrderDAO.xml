@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.six2six.outside.dal.picking.dao.PickingOrderDAO">
+    <!-- tb_picking_list表基础字段 -->
+    <resultMap id="BaseResultMap" type="cn.six2six.outside.dal.picking.mapping.PickingList" >
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="parent_user_id" property="parentUserId"/>
+        <result column="parent_store_id" property="parentStoreId"/>
+        <result column="picking_list_id" property="pickingListId"/>
+        <result column="total_cost_price" property="totalCostPrice"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+            SELECT
+                id,
+                user_id,
+                parent_user_id,
+                parent_store_id,
+                picking_list_id,
+                total_cost_price,
+                create_time,
+                update_time
+            FROM
+                tb_picking_list
+            WHERE
+                picking_list_id = #{pickingListId};
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+            SELECT
+                id,
+                user_id,
+                parent_user_id,
+                parent_store_id,
+                picking_list_id,
+                total_cost_price,
+                create_time,
+                update_time
+            FROM tb_picking_list
+    </select>
+
+    <insert id="insert" parameterType="cn.six2six.outside.dal.picking.mapping.PickingList" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+            INSERT INTO tb_picking_list
+            (
+                user_id,
+                parent_user_id,
+                parent_store_id,
+                picking_list_id,
+                total_cost_price,
+                create_time,
+                update_time
+            )VALUES (
+                #{userId},
+                #{parentUserId},
+                #{parentStoreId},
+                #{pickingListId},
+                #{totalCostPrice},
+                #{createTime},
+                #{updateTime}
+            )
+    </insert>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete
+        from tb_picking_list
+        where picking_list_id = #{pickingListId}
+    </delete>
+
+    <update id="updateById">
+        update tb_picking_list set
+        <if test="userId != null">
+            parent_user_id = #{userId}
+        </if>
+        <if test="parentUserId != null">
+            ,store_id = #{parentUserId}
+        </if>
+        <if test="parentStoreId != null">
+            ,parent_store_id = #{parentStoreId}
+        </if>
+        <if test="totalCostPrice != null">
+            ,total_cost_price = #{totalCostPrice}
+        </if>
+        <if test="createTime != null">
+            ,create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            ,update_time = #{updateTime}
+        </if>
+        where picking_list_id = #{pickingListId}
+    </update>
+
+    <insert id="insertDetail" parameterType="cn.six2six.outside.dal.picking.mapping.PickingListDetail" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO tb_picking_list_detail
+        (
+            product_id,
+            product_detail_id,
+            picking_list_id,
+            model,
+            price,
+            amount,
+            create_time,
+            update_time
+        )VALUES (
+            #{productId},
+            #{productDetailId},
+            #{pickingListDetailId},
+            #{model},
+            #{price},
+            #{amount},
+            #{createTime},
+            #{updateTime}
+        )
+    </insert>
+
+    <select id="selectAllDetail" resultType="cn.six2six.outside.dal.picking.mapping.PickingListDetail" parameterType="java.lang.String">
+        SELECT
+            id,
+            product_id,
+            product_detail_id,
+            picking_list_id,
+            model,
+            price,
+            amount,
+            create_time,
+            update_time
+        FROM
+            tb_picking_list_detail
+        WHERE
+            picking_list_id = #{pickingListId}
+    </select>
+
+    <select id="selectOneDetail" resultType="cn.six2six.outside.dal.picking.mapping.PickingListDetail" parameterType="java.lang.String">
+        SELECT
+            id,
+            product_id,
+            product_detail_id,
+            picking_list_id,
+            model,
+            price,
+            amount,
+            create_time,
+            update_time
+        FROM
+            tb_picking_list_detail
+        WHERE
+            picking_list_id = #{pickingListId}
+    </select>
+
+    <delete id="deleteByIdDetail" parameterType="java.lang.String">
+        delete
+        from tb_picking_list_detail
+        where picking_list_id = #{pickingListId}
+    </delete>
+
+    <update id="updateDetail">
+        update tb_picking_list_detail set
+        <if test="productId != null">
+            ,product_id = #{productId}
+        </if>
+        <if test="productDetailId != null">
+            ,product_detail_id = #{productDetailId}
+        </if>
+        <if test="model != null">
+            ,model = #{model}
+        </if>
+        <if test="price != null">
+            ,price = #{price}
+        </if>
+        <if test="amount != null">
+            ,amount = #{amount}
+        </if>
+        <if test="createTime != null">
+            ,create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            ,update_time = #{updateTime}
+        </if>
+        where product_detail_id = #{productDetailId}
+    </update>
+</mapper>

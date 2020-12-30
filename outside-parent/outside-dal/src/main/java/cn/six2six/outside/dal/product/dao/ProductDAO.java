@@ -56,30 +56,30 @@ public interface ProductDAO {
      *
      * @param productDetail
      */
-    int saveDetail(ProductDetail productDetail);
+    int insertDetail(ProductDetail productDetail);
 
     /**
-     * 根据商品ID查询 所有型号
+     * 根据商品ID查询 该商品下所有型号
      * @param productId 商品Id
      * @return
      */
-    List<ProductDetail> queryAllDetail(String productId);
+    List<ProductDetail> selectAllDetail(String productId);
 
     /**
      * 根据Id查询一条记录
      * @param productDetailId 商品详情ID
      */
-    ProductDetail queryOneDetail(String productDetailId);
+    ProductDetail selectOneDetail(String productDetailId);
 
     /**
      * 删除一条商品详情记录
      * @param productDetailId 商品详情ID
      */
-    int removeByIdDetail(String productDetailId);
+    int deleteByIdDetail(String productDetailId);
 
     /**
      * 更新商品详细
      * @param productDetail 商品详细实体
      */
-    int modifyDetail(ProductDetail productDetail);
+    int updateDetail(ProductDetail productDetail);
 }

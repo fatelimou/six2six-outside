@@ -18,6 +18,6 @@ public class ShipmentBiz {
     private ShipmentOrderDAO shipmentOrderDAO;
 
     public ShipmentOrder queryById(String shipmentOrderId){
-        return  shipmentOrderDAO.queryById(shipmentOrderId);
+        return  shipmentOrderDAO.selectById(shipmentOrderId);
     }
 }

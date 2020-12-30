@@ -14,7 +14,7 @@
     </resultMap>
 
 
-    <select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
             SELECT
                 id,
                 user_id,
@@ -29,4 +29,160 @@
             WHERE
                 shipment_order_id = #{shipmentOrderId};
     </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+            SELECT
+                id,
+                user_id,
+                store_id,
+                shipment_order_id,
+                order_status,
+                total_price,
+                create_time,
+                update_time
+            FROM tb_shipment_order
+    </select>
+
+    <insert id="insert" parameterType="cn.six2six.outside.dal.shipment.mapping.ShipmentOrder" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+            INSERT INTO tb_shipment_order
+            (
+                user_id,
+                store_id,
+                shipment_order_id,
+                order_status,
+                total_price,
+                create_time,
+                update_time
+            )VALUES (
+                #{userId},
+                #{storeId},
+                #{shipmentOrderId},
+                #{orderStatus},
+                #{totalPrice},
+                #{createTime},
+                #{updateTime}
+            )
+    </insert>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete
+        from tb_shipment_order
+        where shipment_order_id = #{shipmentOrderId}
+    </delete>
+
+    <update id="updateById">
+        update tb_shipment_order set
+        <if test="userId != null">
+             user_id = #{userId}
+        </if>
+        <if test="storeId != null">
+            ,store_id = #{storeId}
+        </if>
+        <if test="orderStatus != null">
+            ,order_status = #{orderStatus}
+        </if>
+        <if test="totalPrice != null">
+            ,total_price = #{totalPrice}
+        </if>
+        <if test="createTime != null">
+            ,create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            ,update_time = #{updateTime}
+        </if>
+        where shipment_order_id = #{shipmentOrderId}
+    </update>
+
+    <insert id="insertDetail" parameterType="cn.six2six.outside.dal.shipment.mapping.ShipmentOrderDetail" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO tb_shipment_order_detail
+        (
+            product_id,
+            product_detail_id,
+            shipment_order_id,
+            shipment_order_detail_id,
+            model,
+            quantity,
+            price,
+            create_time,
+            update_time
+        )VALUES (
+            #{productId},
+            #{productDetailId},
+            #{shipmentOrderId},
+            #{shipmentOrderDetailId},
+            #{model},
+            #{quantity},
+            #{price},
+            #{createTime},
+            #{updateTime}
+        )
+    </insert>
+
+    <select id="selectAllDetail" resultType="cn.six2six.outside.dal.shipment.mapping.ShipmentOrderDetail" parameterType="java.lang.String">
+        SELECT
+            id,
+            product_id,
+            product_detail_id,
+            shipment_order_id,
+            shipment_order_detail_id,
+            model,
+            quantity,
+            price,
+            create_time,
+            update_time
+        FROM
+            tb_shipment_order_detail
+        WHERE
+            shipment_order_id = #{shipmentOrderId}
+    </select>
+
+    <select id="selectOneDetail" resultType="cn.six2six.outside.dal.shipment.mapping.ShipmentOrderDetail" parameterType="java.lang.String">
+        SELECT
+            id,
+            product_id,
+            product_detail_id,
+            shipment_order_id,
+            shipment_order_detail_id,
+            model,
+            quantity,
+            price,
+            create_time,
+            update_time
+        FROM
+            tb_shipment_order_detail
+        WHERE
+            shipment_order_detail_id = #{shipmentOrderDetailId}
+    </select>
+
+    <delete id="deleteByIdDetail" parameterType="java.lang.String">
+        delete
+        from tb_shipment_order_detail
+        where shipment_order_detail_id = #{shipmentOrderDetailId}
+    </delete>
+
+    <update id="updateDetail">
+        update tb_shipment_order_detail set
+        <if test="productId != null">
+            product_id = #{productId}
+        </if>
+        <if test="productDetailId != null">
+            ,product_detail_id = #{productDetailId}
+        </if>
+        <if test="model != null">
+            ,model = #{model}
+        </if>
+        <if test="quantity != null">
+            ,quantity = #{quantity}
+        </if>
+        <if test="model != null">
+            ,price = #{price}
+        </if>
+        <if test="createTime != null">
+            ,create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            ,update_time = #{updateTime}
+        </if>
+        where product_detail_id = #{productDetailId}
+    </update>
 </mapper>

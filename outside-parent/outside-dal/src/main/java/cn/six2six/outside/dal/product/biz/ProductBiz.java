@@ -23,11 +23,11 @@ public class ProductBiz {
     }
 
     public ProductDetail queryOneDetail(String productDetailId){
-        return productDAO.queryOneDetail(productDetailId);
+        return productDAO.selectOneDetail(productDetailId);
     }
 
     public List<ProductDetail> queryAllDetail(String productId){
-        return productDAO.queryAllDetail(productId);
+        return productDAO.selectAllDetail(productId);
     }
 
 }
