@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PickingList {
+public class Picking {
 
     /**
      * 主键ID

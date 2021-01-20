@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.six2six.outside.dal.picking.dao.PickingOrderDAO">
     <!-- tb_picking_list表基础字段 -->
-    <resultMap id="BaseResultMap" type="cn.six2six.outside.dal.picking.mapping.PickingList" >
+    <resultMap id="BaseResultMap" type="cn.six2six.outside.dal.picking.mapping.Picking" >
         <result column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="parent_user_id" property="parentUserId"/>
@@ -43,7 +43,7 @@
             FROM tb_picking_list
     </select>
 
-    <insert id="insert" parameterType="cn.six2six.outside.dal.picking.mapping.PickingList" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insert" parameterType="cn.six2six.outside.dal.picking.mapping.Picking" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
             INSERT INTO tb_picking_list
             (
                 user_id,

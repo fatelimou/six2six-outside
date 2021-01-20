@@ -1,6 +1,6 @@
 package cn.six2six.outside.dal.picking.dao;
 
-import cn.six2six.outside.dal.picking.mapping.PickingList;
+import cn.six2six.outside.dal.picking.mapping.Picking;
 import cn.six2six.outside.dal.picking.mapping.PickingListDetail;
 
 import java.util.List;
@@ -16,19 +16,19 @@ public interface PickingOrderDAO {
      * @param pickingListId 进货单号
      * @return 进货数据
      */
-    PickingList selectById(String pickingListId);
+    Picking selectById(String pickingListId);
 
     /**
      * 查询所有进货单信息
      */
-    List<PickingList> selectAll();
+    List<Picking> selectAll();
 
     /**
      * 插入一条进货单信息.
      *
      * @param pickingList
      */
-    int insert(PickingList pickingList);
+    int insert(Picking pickingList);
 
     /**
      * 删除一条进货单信息
@@ -40,7 +40,7 @@ public interface PickingOrderDAO {
      * 更新进货单信息
      * @param pickingList 进货单实体
      */
-    int updateById(PickingList pickingList);
+    int updateById(Picking pickingList);
 
     /**
      * 插入一条进货单详情主体.
