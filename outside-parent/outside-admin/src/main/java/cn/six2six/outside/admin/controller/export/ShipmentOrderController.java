@@ -18,7 +18,7 @@ import java.io.IOException;
 @RestController
 @CrossOrigin
 @ApiModel("出货单操作")
-@RequestMapping("outside/shipmentOrder")
+@RequestMapping("outside/export")
 public class ShipmentOrderController {
 
     @Resource
@@ -31,14 +31,27 @@ public class ShipmentOrderController {
      * @return
      * @throws IOException
      */
-    @GetMapping("export/{shipmentOrderId}")
+    @GetMapping("excel/{shipmentOrderId}")
     @ResponseBody
     public ResultBean getExcel(HttpServletResponse response,
                                @ApiParam(name = "出货单号", value = "shipmentOrderId", required = true) @PathVariable String shipmentOrderId) throws IOException {
 
-        return shipmentOrderBiz.getExcel(response, shipmentOrderId);
+        return shipmentOrderBiz.resultExcelStatus(response, shipmentOrderId);
 
     }
 
+    /**
+     * 生成pdf
+     * @param response
+     * @param shipmentOrderId 出货单号
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("pdf/{shipmentOrderId}")
+    @ResponseBody
+    public ResultBean getPdf(HttpServletResponse response,
+                             @ApiParam(name = "出货单号", value = "shipmentOrderId", required = true) @PathVariable String shipmentOrderId) throws Exception {
+        return shipmentOrderBiz.resultPDFStatus(response, shipmentOrderId);
+    }
 
 }

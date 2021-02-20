@@ -2,16 +2,23 @@ package cn.six2six.outside.dal.export.biz;
 
 import cn.six2six.outside.common.result.ResultBean;
 import cn.six2six.outside.common.utils.ConvertUpMoneyUtils;
+import cn.six2six.outside.dal.export.bean.PicturesInfo;
 import cn.six2six.outside.dal.export.dao.ShipOrderExcelDAO;
 import cn.six2six.outside.dal.export.mapping.ShipOrderToExcel;
 import cn.six2six.outside.dal.shipment.biz.ShipmentBiz;
-import cn.six2six.outside.dal.shipment.dao.ShipmentOrderDAO;
 import cn.six2six.outside.dal.shipment.mapping.ShipmentOrder;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,9 +26,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -42,25 +51,391 @@ public class ShipmentOrderBiz {
     @Resource
     private ShipOrderExcelDAO shipOrderExcelDAO;
 
-
-
+    /**
+     * 生成excel状态返回
+     * @param response
+     * @param shipmentOrderId 出货单单号
+     * @return
+     * @throws IOException
+     */
+    public ResultBean resultExcelStatus(HttpServletResponse response, String shipmentOrderId) throws IOException {
+        log.info("开始生成excel");
+        int status = exprotExcel(response, shipmentOrderId);
+        if(status == 0){
+            log.info("查询数据失败，无法生成excel");
+            return ResultBean.failed();
+        }
+        log.info("生成excel完成");
+        return ResultBean.success();
+    }
 
     /**
-     * 根据出货单号查询 数据库中excel表所需信息
-     * @param shipmentOrderId 出货单号
+     * excel转pdf
+     * @param response
+     * @param shipmentOrderId
+     * @return
+     * @throws IOException
+     */
+    public ResultBean resultPDFStatus(HttpServletResponse response, String shipmentOrderId) throws Exception {
+        response = setResponse(response);
+        String fileName = URLEncoder.encode("结算单", "UTF-8");
+        response.setHeader("Content-disposition",  "attachment;filename=" + fileName + ".pdf");
+        Workbook workbook = getExcel(shipmentOrderId);
+
+
+        Sheet sheet = workbook.getSheetAt(0);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        Document document = new Document(PageSize.A4);//此处根据excel大小设置pdf纸张大小
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+        document.setMargins(0, 0, 15, 15);//设置也边距
+        document.open();
+        float[] widths = getColWidth(sheet);
+
+        PdfPTable table = new PdfPTable(widths);
+        table.setWidthPercentage(90);
+        int colCount = widths.length;
+        BaseFont baseFont = BaseFont.createFont("Fonts\\simsun.ttc,0", BaseFont.IDENTITY_H,
+                BaseFont.EMBEDDED);//设置基本字体
+        for (int r = sheet.getFirstRowNum(); r < sheet.getPhysicalNumberOfRows(); r++) {
+            Row row = sheet.getRow(r);
+            if(row != null){
+                for (int c = row.getFirstCellNum(); (c < row.getLastCellNum() || c < colCount) && c > -1; c++){
+                    if (c >= row.getPhysicalNumberOfCells()) {
+                        PdfPCell pCell = new PdfPCell(new Phrase(""));
+                        pCell.setBorder(0);
+                        table.addCell(pCell);
+                        continue;
+                    }
+                    Cell excelCell = row.getCell(c);
+                    String value = "";
+                    if (excelCell != null){
+                        value = excelCell.toString().trim();
+                        if (value != null && value.length() != 0) {
+                            String dataFormat = excelCell.getCellStyle().getDataFormatString();//获取excel单元格数据显示样式
+                            if (dataFormat != "General" && dataFormat != "@"){
+                                try {
+                                    String numStyle = getNumStyle(dataFormat);
+                                    value = numFormat(numStyle, excelCell.getNumericCellValue());
+                                } catch (Exception e) {
+
+                                }
+                            }
+                            }
+                        }
+                    org.apache.poi.ss.usermodel.Font excelFont = getExcelFont(excelCell);
+
+                    //HSSFFont excelFont = excelCell.getCellStyle().getFont(workbook);
+
+                    /*Font pdFont = new Font(baseFont, excelFont.getFontHeightInPoints(),
+                            excelFont.getFontHeight() == 500 ? com.itextpdf.text.Font.BOLD : com.itextpdf.text.Font.NORMAL, BaseColor.BLACK);//设置单元格字体
+                    */
+                    com.itextpdf.text.Font pdFont = new com.itextpdf.text.Font(baseFont, excelFont.getFontHeightInPoints(),
+                            excelFont.getFontHeight() == 500 ? com.itextpdf.text.Font.BOLD : com.itextpdf.text.Font.NORMAL, BaseColor.BLACK);
+                    PdfPCell pCell = new PdfPCell(new Phrase(value, pdFont));
+                    List<PicturesInfo> infos  = POIExtend.getAllPictureInfos(sheet, r, r, c, c, false);
+                    if (!infos.isEmpty()){
+                        pCell = new PdfPCell(Image.getInstance(infos.get(0).getPictureData()));
+                        PicturesInfo info = infos.get(0);
+                        System.out.println("最大行：" + info.getMaxRow() + "最小行：" + info.getMinRow() + "最大列:" + info.getMaxCol() + "最小列：" + info.getMinCol());;
+                    }
+                    boolean hasBorder = hasBorder(excelCell);
+                    if (!hasBorder){
+                        pCell.setBorder(0);
+                    }
+                    pCell.setHorizontalAlignment(getHorAglin(excelCell.getCellStyle().getAlignment()));
+                    pCell.setVerticalAlignment(getVerAglin(excelCell.getCellStyle().getVerticalAlignment()));
+
+                    pCell.setMinimumHeight(row.getHeightInPoints());
+                    if (isMergedRegion(sheet, r, c)) {
+                        int[] span = getMergedSpan(sheet, r, c);
+                        if (span[0] == 1 && span[1] == 1) {//忽略合并过的单元格
+                            continue;
+                        }
+                        pCell.setRowspan(span[0]);
+                        pCell.setColspan(span[1]);
+                        c = c + span[1] - 1;//合并过的列直接跳过
+                    }
+
+                    table.addCell(pCell);
+                }
+                }else {
+                PdfPCell pCell = new PdfPCell(new Phrase(""));
+                pCell.setBorder(0);
+                pCell.setMinimumHeight(13);
+                table.addCell(pCell);
+                }
+            }
+        document.add(table);
+        document.close();
+
+        byte[] pdfByte = stream.toByteArray();
+        stream.flush();
+        stream.reset();
+        stream.close();
+
+        OutputStream out= response.getOutputStream();
+        out.write(pdfByte);
+        out.flush();
+        closeIO(workbook,out);
+
+        return ResultBean.success();
+    }
+
+    /**
+     * 计算合并单元格合并的跨行跨列数
+     * @param sheet
+     * @param row
+     * @param column
      * @return
      */
-    public ResultBean getExcel(HttpServletResponse response, String shipmentOrderId) throws IOException {
+    private static int[] getMergedSpan(Sheet sheet, int row, int column) {
+        int sheetMergeCount = sheet.getNumMergedRegions();
+        int[] span = { 1, 1 };
+        for (int i = 0; i < sheetMergeCount; i++) {
+            CellRangeAddress range = sheet.getMergedRegion(i);
+            int firstColumn = range.getFirstColumn();
+            int lastColumn = range.getLastColumn();
+            int firstRow = range.getFirstRow();
+            int lastRow = range.getLastRow();
+            if (firstColumn == column && firstRow == row) {
+                span[0] = lastRow - firstRow + 1;
+                span[1] = lastColumn - firstColumn + 1;
+                break;
+            }
+        }
+        return span;
+    }
 
-        List<ShipOrderToExcel> allExcel = shipOrderExcelDAO.getAllExcel(shipmentOrderId);
+    /**
+     * 判断单元格是否是合并单元格
+     * @param sheet
+     * @param row
+     * @param column
+     * @return
+     */
+    private static boolean isMergedRegion(Sheet sheet, int row, int column) {
+        int sheetMergeCount = sheet.getNumMergedRegions();
+        for (int i = 0; i < sheetMergeCount; i++) {
+            CellRangeAddress range = sheet.getMergedRegion(i);
+            int firstColumn = range.getFirstColumn();
+            int lastColumn = range.getLastColumn();
+            int firstRow = range.getFirstRow();
+            int lastRow = range.getLastRow();
+            if (row >= firstRow && row <= lastRow) {
+                if (column >= firstColumn && column <= lastColumn) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
+    /**
+     * excel垂直对齐方式映射到pdf对齐方式
+     * @param aglin
+     * @return
+     */
+    private static int getVerAglin(int aglin) {
+        switch (aglin) {
+            case 1:
+                return com.itextpdf.text.Element.ALIGN_MIDDLE;
+            case 2:
+                return com.itextpdf.text.Element.ALIGN_BOTTOM;
+            case 3:
+                return com.itextpdf.text.Element.ALIGN_TOP;
+            default:
+                return com.itextpdf.text.Element.ALIGN_MIDDLE;
+        }
+    }
+
+    /**
+     * 判断excel单元格是否有边框
+     * @param excelCell
+     * @return
+     */
+    private static boolean hasBorder(Cell excelCell) {
+        short top = excelCell.getCellStyle().getBorderTop();
+        short bottom = excelCell.getCellStyle().getBorderBottom();
+        short left = excelCell.getCellStyle().getBorderLeft();
+        short right = excelCell.getCellStyle().getBorderRight();
+        return top + bottom + left + right > 2;
+    }
+
+    /**
+     * excel水平对齐方式映射到pdf水平对齐方式
+     * @param aglin
+     * @return
+     */
+    private static int getHorAglin(int aglin) {
+        switch (aglin) {
+            case 2:
+                return com.itextpdf.text.Element.ALIGN_CENTER;
+            case 3:
+                return com.itextpdf.text.Element.ALIGN_RIGHT;
+            case 1:
+                return com.itextpdf.text.Element.ALIGN_LEFT;
+            default:
+                return com.itextpdf.text.Element.ALIGN_CENTER;
+        }
+    }
+
+    /**
+     * //获取字体
+     * @param cell
+     * @return
+     */
+    private static org.apache.poi.ss.usermodel.Font getExcelFont(Cell cell) {
+        /*if (excelName.endsWith(".xls")){
+            return ((HSSFCell)cell).getCellStyle().getFont(workbook);
+        }*/
+        return ((XSSFCell) cell).getCellStyle().getFont();
+    }
+        /**
+         * 格式化数字
+         * @param pattern
+         * @param num
+         * @return
+         */
+    private static String numFormat(String pattern, double num){
+        DecimalFormat format = new DecimalFormat(pattern);
+        return format.format(num);
+    }
+
+    /**
+     * 获取excel单元格数据显示格式
+     * @param dataFormat
+     * @return
+     * @throws Exception
+     */
+    private static String getNumStyle(String dataFormat) throws Exception {
+        if (dataFormat == null || dataFormat.length() == 0){
+            throw new Exception("");
+        }
+        if (dataFormat.indexOf("%") > -1){
+            return dataFormat;
+        } else{
+            return dataFormat.substring(0, dataFormat.length()-2);
+        }
+
+    }
+
+    /**
+     * 获取excel中列数最多的行号
+     * @param sheet
+     * @return
+     */
+    private static int getMaxColRowNum(Sheet sheet) {
+        int rowNum = 0;
+        int maxCol = 0;
+        for (int r = sheet.getFirstRowNum(); r < sheet.getPhysicalNumberOfRows(); r++) {
+            Row row = sheet.getRow(r);
+            if (row != null && maxCol < row.getPhysicalNumberOfCells()) {
+                maxCol = row.getPhysicalNumberOfCells();
+                rowNum = r;
+            }
+        }
+        return rowNum;
+    }
+
+    /**
+     * 获取excel中每列宽度的占比
+     * @param sheet
+     * @return
+     */
+    private static float[] getColWidth(Sheet sheet) {
+        int rowNum = getMaxColRowNum(sheet);
+        Row row = sheet.getRow(rowNum);
+        int cellCount = row.getPhysicalNumberOfCells();
+        int[] colWidths = new int[cellCount];
+        int sum = 0;
+
+        for (int i = row.getFirstCellNum(); i < cellCount; i++) {
+            Cell cell = row.getCell(i);
+            if (cell != null) {
+                colWidths[i] = sheet.getColumnWidth(i);
+                sum += sheet.getColumnWidth(i);
+            }
+        }
+
+        float[] colWidthPer = new float[cellCount];
+        for (int i = row.getFirstCellNum(); i < cellCount; i++) {
+            colWidthPer[i] = (float) colWidths[i] / sum * 100;
+        }
+        return colWidthPer;
+    }
+
+    /**
+     * 输出excel文件
+     * @param response
+     * @param shipmentOrderId 出货单号
+     * @throws IOException
+     */
+    private int exprotExcel(HttpServletResponse response, String shipmentOrderId) throws IOException{
+        response = setResponse(response);
+        String fileName = URLEncoder.encode("结算单", "UTF-8");
+        response.setHeader("Content-disposition",  "attachment;filename=" + fileName + ".xlsx");
+        XSSFWorkbook workbook = getExcel(shipmentOrderId);
+        if(workbook == null){
+            return 0;
+        }
+        OutputStream out=response.getOutputStream();
+
+        out.flush();
+
+        workbook.write(out);
+
+        closeIO(workbook,out);
+
+        return 1;
+    }
+
+    /**
+     * 设置response  Content-Type类型和编码
+     * @param response
+     * @return
+     */
+    private HttpServletResponse setResponse(HttpServletResponse response){
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
         // URLEncoder.encode防止中文乱码
-        String fileName = URLEncoder.encode("结算单", "UTF-8");
-        response.setHeader("Content-disposition",  "attachment;filename=" + fileName + ".xlsx");
+        return response;
+    }
+
+    /**
+     * 关流
+     * @param workbook
+     * @param out
+     */
+    private void closeIO(Workbook workbook,OutputStream out) throws IOException{
+        if(workbook != null){
+            workbook.close();
+        }
+
+        if(out != null){
+            out.close();
+        }
+
+    }
+
+    /**
+     * 生成excel
+     * @param shipmentOrderId 出货单号
+     * @return
+     */
+    private XSSFWorkbook getExcel(String shipmentOrderId)  {
+
+        List<ShipOrderToExcel> allExcel = shipOrderExcelDAO.getAllExcel(shipmentOrderId);
+
+        if(allExcel.size() < 0 || allExcel == null){
+            return null;
+        }
+
         ShipmentOrder shipmentOrder = queryById(shipmentOrderId);
 
+        if(shipmentOrder == null){
+            return null;
+        }
 
         XSSFWorkbook workbook = new XSSFWorkbook();
 
@@ -203,17 +578,9 @@ public class ShipmentOrderBiz {
         cellButtom.setCellValue("制单：                    发货人：                     审核人：                       收货人：");
         sheet.addMergedRegionUnsafe(new CellRangeAddress(sheet.getLastRowNum(), sheet.getLastRowNum(), 0, 7));
 
-        OutputStream out=response.getOutputStream();
-
-        out.flush();
-
-        workbook.write(out);
-
-        workbook.close();
-
-        out.close();
-        return ResultBean.success();
+        return workbook;
     }
+
 
     /**
      * 订单数据字体样式设置
